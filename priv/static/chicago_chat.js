@@ -1,6 +1,6 @@
 $(function() {
-  $chat = $("#chat");
-  $nick = null;
+  var $chat = $("#chat");
+  var $nick = null;
 
   appendChat({nick: "Sebastian", body: "Hi there!"});
   appendChat({nick: "Jodoz", body: "Make the chat!"});
