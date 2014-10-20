@@ -5,6 +5,11 @@ body {
   font-family: monospace;
 }
 
+#chat {
+  list-style: none;
+  padding-left: 0;
+}
+
 .nick {
   color: blue;
 }
@@ -14,5 +19,12 @@ body {
 }
 
 input[type=text] {
-  width: 600px;
+  width: 500px;
+  font-size: 16pt;
+  font-family: monospace;
+}
+
+button {
+  font-size: 16pt;
+  font-family: monospace;
 }
