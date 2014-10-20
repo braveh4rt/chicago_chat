@@ -48,7 +48,6 @@ remove_client_from_room(Room, WebSocket) ->
   add_message_to_room(NewRoom, server_message(<<"Client has quit!">>)).
 
 add_message_to_room(Room, Message) ->
-  io:format(",,,,,,,,,,,, Message: ~p.~n", [Message]),
   Clients = Room#room_state.clients,
   Messages = Room#room_state.messages,
   lists:foreach(fun(WS) -> WS ! {text, Message} end, Clients),
