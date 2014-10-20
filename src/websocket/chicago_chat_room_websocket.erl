@@ -16,8 +16,7 @@ handle_close(Reason, ServiceURL, WebSocket, State) ->
   {State, State}.
 
 handle_incoming(ServiceURL, WebSocket, Message, State) ->
-  io:format("~p~n", [Message]),
-  {noreply, [Message | State]}.
+  {noreply, add_message_to_room(State, Message)}.
 
 handle_info(Info, State) ->
   {noreply, State}.
@@ -40,7 +39,12 @@ init_room() ->
 add_client_to_room(Room, WebSocket) ->
   NewClients = [WebSocket | Room#room_state.clients],
   NewRoom = Room#room_state{clients = NewClients},
-  send_to_room(NewRoom, server_message(<<"Welcome chatter!">>)),
+  add_message_to_room(NewRoom, server_message(<<"Welcome chatter!">>)).
+
+add_message_to_room(Room, Message) ->
+  NewMessages = [Message | Room#room_state.clients],
+  NewRoom = Room#room_state{messages = NewMessages},
+  send_to_room(NewRoom, Message),
   NewRoom.
 
 send_to_room(Room, Message) ->

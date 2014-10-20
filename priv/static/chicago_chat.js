@@ -38,7 +38,6 @@ $(function() {
 
   function say(body) {
     var msg = {nick: $nick, body: body};
-    appendChat(msg);
     $wsc.send(JSON.stringify(msg));
   }
 
