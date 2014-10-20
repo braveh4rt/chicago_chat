@@ -13,7 +13,7 @@ handle_join(ServiceURL, WebSocket, State) ->
   {noreply, add_client_to_room(State, WebSocket)}.
 
 handle_close(Reason, ServiceURL, WebSocket, State) ->
-  {State, State}.
+  {noreply, remove_client_from_room(State, WebSocket)}.
 
 handle_incoming(ServiceURL, WebSocket, Message, State) ->
   {noreply, add_message_to_room(State, Message)}.
@@ -41,6 +41,11 @@ add_client_to_room(Room, WebSocket) ->
   NewRoom = Room#room_state{clients = NewClients},
   send_many_messages(WebSocket, lists:reverse(Room#room_state.messages)),
   add_message_to_room(NewRoom, server_message(<<"Welcome chatter!">>)).
+
+remove_client_from_room(Room, WebSocket) ->
+  NewClients = lists:delete(WebSocket, Room#room_state.clients),
+  NewRoom = Room#room_state{clients = NewClients},
+  add_message_to_room(NewRoom, server_message(<<"Client has quit!">>)).
 
 add_message_to_room(Room, Message) ->
   io:format(",,,,,,,,,,,, Message: ~p.~n", [Message]),
