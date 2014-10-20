@@ -1,0 +1,18 @@
+body {
+  width: 760px;
+  margin: 0 auto;
+  font-size: 16pt;
+  font-family: monospace;
+}
+
+.nick {
+  color: blue;
+}
+
+#say_controls {
+  display: none;
+}
+
+input[type=text] {
+  width: 600px;
+}
