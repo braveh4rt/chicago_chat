@@ -7,6 +7,7 @@ $(function() {
   appendChat({nick: "Sebastian", body: "Ok..."});
 
   $("#nick").click(onNickClick);
+  $("#say").click(onSayClick);
 
   function appendChat(message) {
     li = $("<li></li>");
@@ -19,5 +20,15 @@ $(function() {
     $nick = $("#nick_text").val();
     $("#nick_controls").hide();
     $("#say_controls").show();
+  }
+
+  function onSayClick() {
+    var body = $("#say_text").val();
+    say(body);
+  }
+
+  function say(body) {
+    var msg = {nick: $nick, body: body};
+    appendChat(msg);
   }
 })
