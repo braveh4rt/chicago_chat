@@ -1,6 +1,7 @@
 $(function() {
   var $chat = $("#chat");
   var $nick = null;
+  var $wsc  = null;
 
   appendChat({nick: "Sebastian", body: "Hi there!"});
   appendChat({nick: "Jodoz", body: "Make the chat!"});
@@ -20,6 +21,7 @@ $(function() {
     $nick = $("#nick_text").val();
     $("#nick_controls").hide();
     $("#say_controls").show();
+    initWsc();
   }
 
   function onSayClick() {
@@ -27,8 +29,30 @@ $(function() {
     say(body);
   }
 
+  function initWsc() {
+    $wsc = new WebSocket("ws://localhost:8001/websocket/room", "room");
+    $wsc.onopen = onWsOpen;
+    $wsc.onerror = onWsError;
+    $wsc.onmessage = onIncomingWsMessage;
+  }
+
   function say(body) {
     var msg = {nick: $nick, body: body};
     appendChat(msg);
+    $wsc.send(JSON.stringify(msg));
   }
+
+  function onIncomingWsMessage(wsMessage) {
+    var msg = JSON.parse(wsMessage.data);
+    appendChat(msg);
+  }
+
+  function onWsOpen() {
+    console.log("Connected to chatroom.");
+  }
+
+  function onWsError(error){
+    alert("WEBSOCKET ERROR: " + error);
+  }
+
 })
