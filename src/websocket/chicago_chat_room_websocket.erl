@@ -39,6 +39,7 @@ init_room() ->
 add_client_to_room(Room, WebSocket) ->
   NewClients = [WebSocket | Room#room_state.clients],
   NewRoom = Room#room_state{clients = NewClients},
+  send_many_messages(WebSocket, lists:reverse(Room#room_state.messages)),
   add_message_to_room(NewRoom, server_message(<<"Welcome chatter!">>)).
 
 add_message_to_room(Room, Message) ->
@@ -47,3 +48,6 @@ add_message_to_room(Room, Message) ->
   Messages = Room#room_state.messages,
   lists:foreach(fun(WS) -> WS ! {text, Message} end, Clients),
   Room#room_state{messages = [Message | Messages]}.
+
+send_many_messages(WebSocket, Messages) ->
+  lists:foreach(fun(Msg) -> WebSocket ! {text, Msg} end, Messages).
