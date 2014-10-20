@@ -42,17 +42,8 @@ add_client_to_room(Room, WebSocket) ->
   add_message_to_room(NewRoom, server_message(<<"Welcome chatter!">>)).
 
 add_message_to_room(Room, Message) ->
-  NewMessages = [Message | Room#room_state.clients],
-  NewRoom = Room#room_state{messages = NewMessages},
-  send_to_room(NewRoom, Message),
-  NewRoom.
-
-send_to_room(Room, Message) ->
-  send_to_many(Room#room_state.clients, Message).
-
-% Erlang allows simpler iteration via list module but I'm in hurry.
-send_to_many([WebSocket | Tail], Message) ->
-  WebSocket ! {text, Message};
-
-send_to_many([], _) ->
-  ok.
+  io:format(",,,,,,,,,,,, Message: ~p.~n", [Message]),
+  Clients = Room#room_state.clients,
+  Messages = Room#room_state.messages,
+  lists:foreach(fun(WS) -> WS ! {text, Message} end, Clients),
+  Room#room_state{messages = [Message | Messages]}.
