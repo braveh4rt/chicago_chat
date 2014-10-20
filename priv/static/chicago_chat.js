@@ -47,7 +47,7 @@ $(function() {
   }
 
   function onWsOpen() {
-    console.log("Connected to chatroom.");
+    appendChat({nick: "Browser", body: "Connected to chatroom."});
   }
 
   function onWsError(error){
